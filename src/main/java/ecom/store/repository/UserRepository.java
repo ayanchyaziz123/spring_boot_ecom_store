@@ -1,7 +1,7 @@
 package ecom.store.repository;
 
-import ecom.store.model.Product;
+import ecom.store.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<Product, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 }
