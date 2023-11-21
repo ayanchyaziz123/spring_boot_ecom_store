@@ -1,0 +1,3 @@
+mysql server run for ubanto
+cd /opt/lampp
+sudo ./lampp start
