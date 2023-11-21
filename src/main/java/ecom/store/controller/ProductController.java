@@ -1,5 +1,4 @@
 package ecom.store.controller;
-import ecom.store.controller.controllerAdvice.ProductNotFoundException;
 import ecom.store.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,9 +31,6 @@ public class ProductController {
         System.out.println("Hello world....!!!!");
         String name = product.getName();
         System.out.println("name is here -->> " + name);
-        if(name.length() < 5){
-             throw new ProductNotFoundException("Name length sould be more than 5 character..!");
-        }
         Product saveProduct =  productService.saveProduct(product);
 
         return saveProduct;
