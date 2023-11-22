@@ -18,6 +18,8 @@ public class UserController {
 
     private final UserService userService;
     private final BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     public UserController(UserService userService, BCryptPasswordEncoder passwordEncoder) {
@@ -54,7 +56,10 @@ public class UserController {
             System.out.println(enteredPassword + storedPassword);
 
             if(passwordEncoder.matches(enteredPassword, storedPassword)){
-                return ResponseEntity.status(HttpStatus.CREATED).body("Password match");
+                System.out.print("Matched..!");
+                String token = jwtTokenProvider.generateToken(user.getEmail());
+                System.out.println("Token " + token);
+                return ResponseEntity.status(HttpStatus.CREATED).body(token);
             }
             else{
                 return ResponseEntity.status(HttpStatus.CREATED).body("Not");
