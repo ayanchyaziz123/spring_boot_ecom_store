@@ -7,8 +7,9 @@ import ecom.store.service.UserService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Optional;
-
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
@@ -59,8 +60,12 @@ public class UserController {
             if(user == null){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token is not valid");
             }
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(userEmail);
+            User newUser = user.get();
+            newUser.setIsVerified(true);
+            Map<String, Object> responseBody = new HashMap<String, Object>();
+            responseBody.put("user", newUser);
+            responseBody.put("token", token);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
         }
         catch(Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -82,6 +87,7 @@ public class UserController {
             // Hash the password before saving the user
             String hashedPassword = passwordEncoder.encode(user.getPassword());
             user.setPassword(hashedPassword);
+            User createUser = userService.createUser(user);
             String token = jwtTokenProvider.generateToken(user.getEmail());
             String baseURL = "http://localhost:8080"; // Update this with your actual base URL
             // Create the verification URL by appending the token
@@ -119,6 +125,4 @@ public class UserController {
                     .body("Error creating user: " + e.getMessage());
         }
     }
-
-    // Add exception handlers if needed
 }

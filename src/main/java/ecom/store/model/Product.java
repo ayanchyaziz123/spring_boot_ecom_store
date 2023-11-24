@@ -12,6 +12,7 @@ public class Product {
     private long id;
     private String name;
     private double price;
+    private double quantity;
     // Setter for the 'id' field
     public void setId(Long id) {
         this.id = id;

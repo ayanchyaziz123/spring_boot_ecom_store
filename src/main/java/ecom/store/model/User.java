@@ -1,4 +1,6 @@
 package ecom.store.model;
+import org.springframework.beans.factory.annotation.Value;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,8 +15,14 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+    @Value("${user.default.isAdmin:false}")
     private boolean isAdmin;
-    private boolean isVerified;
+    @Value("${user.default.isVerified:false}")
+    private boolean isVerified; 
+    public User(){
+        this.isAdmin = false;
+        this.isVerified = false;
+    }
     public void setId(Long id)
     {
         this.id = id;
