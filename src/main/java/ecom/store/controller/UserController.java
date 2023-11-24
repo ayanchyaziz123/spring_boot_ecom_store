@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 @RestController
 @RequestMapping("/user")
@@ -71,6 +72,27 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @GetMapping("/resetPassword")
+    public ResponseEntity<?> resetPassword(@RequestBody String email){
+        Optional<User> optionalUser = userService.getUserByEmail(email);
+        if(optionalUser.isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email was not matched..!");
+        }
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Email matched..!");
+    }
+
+    @GetMapping("/changePassword")
+    public ResponseEntity<?> changePassword(@RequestBody User user){
+        Optional<User> optionalUser = userService.getUserByEmail(user.getEmail());
+        String enterdPassword = user.getPassword();
+        String storedPassword = optionalUser.get().getPassword();
+        if(enterdPassword != storedPassword){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords are not matched..!");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("Password matched");
+    }
+
     @PostMapping("/create")
     public ResponseEntity<?> createUser(@RequestBody User user) {
         try {
